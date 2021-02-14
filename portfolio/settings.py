@@ -70,7 +70,7 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+#https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -80,7 +80,7 @@ DATABASES = {
         'PASSWORD': 'django1234',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+   }
 }
 
 # Password validation
