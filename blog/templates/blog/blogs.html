@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  {% load staticfiles %}
+  {% load static %}
   <link rel="apple-touch-icon" href="/custom_icon.png"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -68,8 +68,8 @@
       <h2>Latest Posts</h2>
       <hr>
       {% for blog in blogs.all %}
-      <a href="{{blog.image.url}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
       <a href="/blog/{{ blog.id }}/"><h3>{{ blog.title }}</h3></a>
+      <a href="{{blog.image.url}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
       <p>{{ blog.summary }}</p>
       <a href="/blog/{{ blog.id }}/">Read more</a><br>
       Publication time - {{blog.pretty_pub}}<br><br>
