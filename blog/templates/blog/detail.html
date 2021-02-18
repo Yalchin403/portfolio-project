@@ -32,6 +32,9 @@
     -ms-user-select: none;
     user-select: none;
   }
+  p.detail-image {
+    text-align: center;
+}
 
   @media (min-width: 768px) {
     .bd-placeholder-img-lg {
@@ -63,7 +66,9 @@
   <div class="container">
     <h1 class="text-center">{{d_blog.title}}</h1><br>
     Click on the photo to zoom... <br>
-    <a href="{{d_blog.image.url}}"><img class="image-fluid" src="{{ d_blog.image.url }}" objec-fit :cover height="200" width="200"></a><br>
-    <p>{{ d_blog.descript|linebreaks }} </p>
+    <p class="detail-image" >
+    <a href="{{d_blog.image.url}}"><img class="image-fluid" src="{{ d_blog.image.url }}" objec-fit :cover  width="400"></a><br>
+    </p>
+  <p>{{ d_blog.descript|safe }} </p>
   </div>
 </main>

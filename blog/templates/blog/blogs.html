@@ -70,7 +70,7 @@
       {% for blog in blogs.all %}
       <a href="/blog/{{ blog.id }}/"><h3>{{ blog.title }}</h3></a>
       <a href="{{blog.image.url}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
-      <p>{{ blog.summary }}</p>
+      <p>{{ blog.summary|safe }}</p>
       <a href="/blog/{{ blog.id }}/">Read more</a><br>
       Publication time - {{blog.pretty_pub}}<br><br>
       {% endfor %}

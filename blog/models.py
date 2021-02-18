@@ -5,7 +5,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     time_pub = models.DateTimeField()
     image = models.ImageField(upload_to='images/')
-    descript = models.TextField(max_length=7000)
+    descript = models.TextField()
     def __str__(self):
         return self.title
 
