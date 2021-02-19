@@ -67,7 +67,7 @@
         <p>
           <a href="mailto:yalchinmammadli@outlook.com" class="btn btn-primary my-2">E-mail me</a>
         </p>
-        <img src="{% static "owner.jpg" %}" width="300" height="300">
+        <img src="{% static "MY.jpg" %}" width="300" height="300">
       </div>
     </section>
 <h1 class="text-center">Portfolio</h1><br>
@@ -77,7 +77,7 @@
           {% for job in jobs.all %}
           <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-              <a href="{{ job.image.url }}"><img class="card-image-top" src="{{ job.image.url }}" width="300" height="300"></a>
+              <a href="{{ job.image.url }}"><img class="card-image-top" src="{{ job.image.url }}" width=100%></a>
               <div class="card-body">
                 <h4>{{job.title}}</h4>
                 <p class="card-text">{{ job.summary }}</p>
