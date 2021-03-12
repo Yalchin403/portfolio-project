@@ -27,8 +27,8 @@ class BlogView(View):
 
         
 class DetailView(View):
-    def get(self, request, blog_id):
-        d_blog = get_object_or_404(Blog, pk=blog_id)
+    def get(self, request, slug):
+        d_blog = get_object_or_404(Blog, slug=slug)
         context = {'d_blog': d_blog}
         return render(request, 'blog/detail.html', context)
 

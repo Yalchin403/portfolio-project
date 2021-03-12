@@ -7,5 +7,5 @@ app_name='blog'
 urlpatterns = [
     path('', views.BlogView.as_view(), name='blog'),
     path('search', views.SearchView.as_view(), name='search'),
-    path('<int:blog_id>/', views.DetailView.as_view(), name='d_blog'),
+    path('<str:slug>/', views.DetailView.as_view(), name='d_blog'),
     ]
