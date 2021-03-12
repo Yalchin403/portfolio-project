@@ -51,6 +51,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
+
           <a class="nav-link" href="https://linkedin.com/in/yalchin-mammadli-42b30318a" target="_blank">Linkedin</a>
          <a class="nav-link" href="https://drive.google.com/drive/folders/1JKeq2t_Bf20ac_Mnd3bITwWqNFSWEtmf?usp=sharing" target="_blank">Certificates</a>
           <a class="nav-link" href="https://drive.google.com/file/d/1k5h1g42SI2Cf6k6eMscPyRdjN78jYXO2/view?usp=sharing" target="_blank">Resume</a>
@@ -58,23 +59,76 @@
         </div>
       </div>
     </nav>
-  </header>
 
+  </header>
   <main role="main">
     <section class="jumbotron">
     <div class="container">
-
+      
       <h1 class="text-center pt-3">Welcome to Yalchin's Blog!</h1>
+
+
+      <form class="form-inline" method="GET", action="/blog/search">
+          {% if not searched %}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search Blog Post" aria-label="Search" name="search">
+          {% else %}
+            <input class="form-control mr-sm-2" type="search" placeholder="{{searched}}" aria-label="Search" name="search">
+          {% endif %}
+            
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+
       <br><br>
       <h2>Latest Posts</h2>
       <hr>
-      {% for blog in blogs.all %}
-      <a href="/blog/{{ blog.id }}/"><h3>{{ blog.title }}</h3></a>
-      <a href="{{blog.image.url}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
-      <p>{{ blog.summary|safe }}</p>
-      <a href="/blog/{{ blog.id }}/">Read more</a><br>
-      Publication time - {{blog.pretty_pub}}<br><br>
-      {% endfor %}
+      {% if page_obj %}
+          {% for blog in page_obj %}
+          <a href="/blog/{{ blog.id }}/"><h3>{{ blog.title }}</h3></a>
+          <a href="{{blog.image.url}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
+          <p>{{ blog.summary|safe }}</p>
+          <a href="/blog/{{ blog.id }}/">Read more</a><br>
+          Publication time - {{blog.pretty_pub}}<br><br>
+          {% endfor %}
+
+          <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item enabled">
+                {% if page_obj.has_previous %}
+                <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                {%endif%}
+              </li>
+              <li class="page-item active">
+                <a class="page-link" href="?page={{ page_num }}">
+                  {{page_num}}
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">{{page_obj.next_page_number}}</a></li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{num_of_pages}}">Last</a>
+              </li>
+              {%endif%}
+            </ul>
+          </nav>
+
+      {% else %}
+        <div class="container">
+          <div class="row">
+            <div class="card-body mt" mb-2>
+              <h2 class="card-title">
+                No results :(
+              </h2>
+              <p class="card-text">
+                There were no results matching your serach...
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      {% endif %}
+
 
     </div>
     </section>
