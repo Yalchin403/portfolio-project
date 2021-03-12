@@ -5,5 +5,5 @@ from .models import Job
 # Create your views here.
 class HomeView(View):
     def get(self, request):
-        jobs = Job.objects
+        jobs = Job.objects.order_by('-start_time')
         return render(request, 'jobs/home.html', {'jobs': jobs})
