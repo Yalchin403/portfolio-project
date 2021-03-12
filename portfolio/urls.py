@@ -23,5 +23,5 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('owner/', admin.site.urls),
     path('', include('jobs.urls')),
-    path('blog/', include('blog.urls')),
+    path('blog/', include('blog.urls'), name='blog'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
