@@ -15,7 +15,7 @@ class BlogView(View):
         num_of_pages = paginator.num_pages
         page_number = request.GET.get('page')
         if not page_number:
-        	page_number = 1
+        	page_number = "1"
        	elif int(page_number) > num_of_pages:
        		page_number=str(num_of_pages)
        	elif int(page_number) < 1:
