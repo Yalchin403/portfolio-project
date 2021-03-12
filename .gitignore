@@ -4,6 +4,7 @@
 /media
 /static
 ### Django ###
+**/migrations
 *.log
 *.pot
 *.pyc
