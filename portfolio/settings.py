@@ -159,7 +159,7 @@ CKEDITOR_CONFIGS = {
         ],
                  # Add code block plugin
        
-        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils']),
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'clipboard']),
 
     }
 }
