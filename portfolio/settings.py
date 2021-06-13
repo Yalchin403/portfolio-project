@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,35 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+CKEDITOR_CONFIGS = {
+         # django-ckeditor uses the default configuration by default
+    'default': {
+                 # Editor width adaptive
+        'width':'auto',
+        'height':'250px',
+                 # Tab key to convert the number of spaces
+        'tabSpaces': 4,
+                 # Toolbar style
+        'toolbar': 'Custom',
+                 # Toolbar button
+        'toolbar_Custom': [
+                         # Emoji code block
+            ['Smiley', 'CodeSnippet'], 
+                         # Font style
+            ['Bold', 'Italic', 'Underline', 'RemoveFormat', 'Blockquote'],
+                         # font color 
+            ['TextColor', 'BGColor'],
+                         # Link
+            ['Link', 'Unlink'],
+                         # List
+            ['NumberedList', 'BulletedList'],
+                         # Maximize
+            ['Maximize']
+        ],
+                 # Add code block plugin
+        'extraPlugins': ','.join(['codesnippet']),
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils']),
+    }
+}
