@@ -131,7 +131,7 @@ try:
 except ImportError:
     pass
 
-
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_CONFIGS = {
          # django-ckeditor uses the default configuration by default
     'default': {
@@ -158,7 +158,8 @@ CKEDITOR_CONFIGS = {
             ['Maximize']
         ],
                  # Add code block plugin
-        'extraPlugins': ','.join(['codesnippet']),
+       
         'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils']),
+
     }
 }
