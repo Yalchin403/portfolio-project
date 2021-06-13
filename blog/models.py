@@ -24,7 +24,7 @@ class Blog(models.Model):
         return super().save(*args, **kwargs)
 
 
-class Images(models.Model):
+class Image(models.Model):
     img_name = models.CharField(max_length=50)
     img = models.ImageField(upload_to='images/')
 
