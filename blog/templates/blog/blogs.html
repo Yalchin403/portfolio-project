@@ -38,6 +38,13 @@
       font-size: 3.5rem;
     }
   }
+
+  .messages {
+            background-color: rgb(243, 164, 164);
+            color: rgb(230, 36, 36);
+            padding: 10px;
+            margin-top: 10px;
+        }
   </style>
   <!-- Custom styles for this template -->
   <link href="" rel="stylesheet">
@@ -77,11 +84,15 @@
             
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
+      <br><br>
+      {% for message in messages %}
+        <p class="messages" >{{message}}</p>
+      {% endfor %} <br>
 
       <br><br>
       <h2>Latest Posts</h2>
       <hr>
-      {% if page_obj %}
+     
           {% for blog in page_obj %}
           <a href="/blog/{{ blog.slug }}/"><h3>{{ blog.title }}</h3></a>
           <a href="{{blog.slug}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
@@ -90,6 +101,7 @@
           Publication time - {{blog.pretty_pub}}<br><br>
           {% endfor %}
 
+          {% if not no_result %}
           <nav aria-label="...">
             <ul class="pagination">
               <li class="page-item enabled">
@@ -112,9 +124,10 @@
               {%endif%}
             </ul>
           </nav>
+          {% endif %}
 
 
-      {% else %}
+      {% if no_result %}
         <div class="container">
           <div class="row">
             <div class="card-body mt" mb-2>

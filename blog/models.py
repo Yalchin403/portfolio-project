@@ -31,3 +31,11 @@ class Image(models.Model):
 
     def __str__(self):
         return self.img_name
+
+
+class Subscription(models.Model):
+    email = models.CharField(max_length=50)
+    full_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.full_name
