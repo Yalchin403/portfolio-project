@@ -145,7 +145,8 @@ CKEDITOR_CONFIGS = {
                  # Toolbar button
         'toolbar_Custom': [
                          # Emoji code block
-            ['Smiley', 'CodeSnippet'], 
+            ['Smiley', 'CodeSnippet'],
+            ['Format'],
                          # Font style
             ['Bold', 'Italic', 'Underline', 'RemoveFormat', 'Blockquote'],
                          # font color 
@@ -156,14 +157,13 @@ CKEDITOR_CONFIGS = {
             ['NumberedList', 'BulletedList'],
                          # Maximize
             ['Maximize'],
-            [ 'Source', '-', 'Bold', 'Italic' ],
-            ['Table'],
-            ['Format'],
+            [ 'Source' ],
+            ['Table', 'Tabletools'],
             ['Image']
         ],
                  # Add code block plugin
        
-        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'table','clipboard', 'format', 'image']),
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'table','clipboard', 'format', 'image', 'tabletools']),
 
     }
 }
