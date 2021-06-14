@@ -80,9 +80,14 @@ class SubscribeView(View):
 		email = request.POST.get('email')
 
 		if full_name and email:
+			if Subscription.objects.filter(email=email).exists():
+				messages.error(request, 'You have already subscribed...')
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 			sub_obj = Subscription(email=email, full_name=full_name)
 			sub_obj.save()
 			return render(request, 'blog/subs_thank.html')
+
 		else:
 			messages.error(request, 'You can not leave the form field/s empty...')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
