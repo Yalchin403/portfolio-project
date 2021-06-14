@@ -155,11 +155,15 @@ CKEDITOR_CONFIGS = {
                          # List
             ['NumberedList', 'BulletedList'],
                          # Maximize
-            ['Maximize']
+            ['Maximize'],
+            [ 'Source', '-', 'Bold', 'Italic' ],
+            ['Table'],
+            ['Format'],
+            ['Image']
         ],
                  # Add code block plugin
        
-        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'clipboard']),
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'table','clipboard', 'format', 'image']),
 
     }
 }
