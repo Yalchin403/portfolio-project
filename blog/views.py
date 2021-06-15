@@ -61,7 +61,7 @@ class SearchView(View):
 		else:
 			messages.error(request, 'You cannot leave empty...')
 			searched = "Search Blog Post"
-			objs = Blog.objects.all()
+			objs = Blog.objects.order_by('-time_pub').all()
 
 		per_page = 5
 		paginator = Paginator(objs, per_page)
