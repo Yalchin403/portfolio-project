@@ -29,6 +29,16 @@ class BlogView(View):
 class DetailView(View):
     def get(self, request, slug):
         d_blog = get_object_or_404(Blog, slug=slug)
+        try:
+            if not 'viewed_post_%s' % d_blog.id in request.session:
+                d_blog.visit_counter += 1
+                request.session['viewed_post_%s' % d_blog.id] = True
+                # set_cookie(request, 'viewed_post_%s' % d_blog.id)
+                d_blog.save()
+
+        except:
+            pass # we don't do anything if user already has viewed the post
+
         context = {'d_blog': d_blog}
         return render(request, 'blog/detail.html', context)
 

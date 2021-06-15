@@ -7,9 +7,10 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     time_pub = models.DateTimeField()
     image = models.ImageField(upload_to='images/')
-    # descript = models.TextField()
     descript = RichTextField(blank=True, null=True)
     slug = models.SlugField(null=True, unique=True, blank=True)
+    visit_counter = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title
 

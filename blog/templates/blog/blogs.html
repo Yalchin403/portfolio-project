@@ -11,7 +11,6 @@
   <title>My Blog</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
-
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <!-- Favicons -->
@@ -45,6 +44,7 @@
             padding: 10px;
             margin-top: 10px;
         }
+
   </style>
   <!-- Custom styles for this template -->
   <link href="" rel="stylesheet">
@@ -71,10 +71,12 @@
   <main role="main">
     <section class="jumbotron">
     <div class="container">
+      <div class="row">
       
       <h1 class="text-center pt-3">Welcome to Yalchin's Blog!</h1>
 
 
+      </div>
       <form class="form-inline" method="GET", action="/blog/search">
           {% if not searched %}
             <input class="form-control mr-sm-2" type="search" placeholder="Search Blog Post" aria-label="Search" name="search">
@@ -87,19 +89,65 @@
       <br><br>
       {% for message in messages %}
         <p class="messages" >{{message}}</p>
-      {% endfor %} <br>
+      {% endfor %} 
+    </div>
 
-      <br><br>
-      <h2>Latest Posts</h2>
+<h2 class="text-center">Latest Posts</h2>
+    <div class="container">
+      
       <hr>
      
-          {% for blog in page_obj %}
+          <!-- {% for blog in page_obj %}
           <a href="/blog/{{ blog.slug }}/"><h3>{{ blog.title }}</h3></a>
           <a href="{{blog.slug}}"><img class="image-fluid" src="{{ blog.image.url }}" height="200" width="200"></a>
           <p>{{ blog.summary|safe }}</p>
           <a href="/blog/{{ blog.slug }}/">Read more</a><br>
+          <i class="fas fa-eye"></i>
+          {{blog.visit_counter}}
           Publication time - {{blog.pretty_pub}}<br><br>
-          {% endfor %}
+          {% endfor %} -->
+
+              <div class="container">
+                <div class="row">
+                  {% for blog in page_obj %}
+                  <div class="col-md-4">
+
+
+                    <div class="card" style="width: 18rem;">
+                        
+                           <a href="{{blog.slug}}"><img height="200px" class="card-img-top" src="{{blog.image.url}}" alt="Card image cap"></a>
+                                <div class="card-body">
+                                  <h5 class="card-title">{{blog.title}}</h5>
+                                  <p class="card-text">{{blog.summary|striptags|safe}}</p>
+                                </div>
+
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item">
+                                        <i class="fas fa-eye"></i>
+                                        {{blog.visit_counter}}
+                                  </li>
+                                  <li class="list-group-item">{{blog.pretty_pub}}</li>
+                                  
+                                </ul>
+
+                                <div class="card-body">
+                                  <a href="/blog/{{blog.slug}}/" class="card-link">Read more...</a>
+                                 
+                                </div>
+
+                    </div><br>
+
+
+                    </div>
+                  {% endfor %}
+                  </div>
+                </div>
+              </div>
+                  
+                
+                
+
+
 
           {% if not no_result %}
           <nav aria-label="...">
@@ -167,4 +215,5 @@
 
   gtag('config', 'G-YZWT7RLV6H');
 </script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   </html>
