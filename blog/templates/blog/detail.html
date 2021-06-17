@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load social_share %}
   <link rel="apple-touch-icon" href="/custom_icon.png"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,6 +15,7 @@
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Favicons -->
   <link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
@@ -90,7 +92,13 @@
     </p>
   <p>{{ d_blog.descript|safe }} </p>
 
+ <a href="https://telegram.me/share/url?url=https://yalchin.info{{d_blog.get_absolute_url}}&text={{d_blog.title}}" target="_blank"><img width="20px" height="20px" src="{% static 'telegram.svg' %}"></a>
 
+ <a href="https://reddit.com/submit?url=https://yalchin.info{{d_blog.get_absolute_url}}&title={{d_blog.title}}" target="_blank"><img width="20px" height="20px" src="{% static 'reddit.svg' %}"></a>
+
+ <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://yalchin.info{{d_blog.get_absolute_url}}" target="_blank"><img width="20px" height="20px" src="{% static 'linkedin.svg' %}"></a>
+ 
+<br><br>
 <h2>Subscribe to get notified about new posts!</h2>
   <form method="POST" action="/blog/user/subscribe/">
     {% csrf_token %}
