@@ -101,3 +101,6 @@ class SubscribeView(View):
 		else:
 			messages.error(request, 'You can not leave the form field/s empty...')
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+	
+def error_404(request, exception):
+        return render(request,'blog/error_404.html')

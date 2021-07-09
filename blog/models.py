@@ -50,6 +50,25 @@ class Subscription(models.Model):
     def __str__(self):
         return self.full_name
 
+    def save(self, *args, **kwargs):
+        try:
+            email_body =f"Congrats, you've got new subscriber<br>Name: {self.full_name}"
+            email = "yalchinmammadli@outlook.com"
+
+            msg = EmailMessage(
+                "New Subscription",
+                email_body,
+                EMAIL_HOST_USER,
+                [email]
+            )
+            msg.content_subtype = "html"
+            msg.send()
+        except:
+            pass
+        
+        return super().save(*args, **kwargs)
+
+
 
 class Notification(models.Model):
 
@@ -71,8 +90,6 @@ class Notification(models.Model):
                 Link to post: https://yalchin.info{post_url}<br>Thanks for your interest!<br>Best,<br>Yalchin Mammadli'
                 
                 email = sub_obj.email
-
-                # send_mail(self.subject, email_body, EMAIL_HOST_USER, [email], fail_silently = False)
 
                 msg = EmailMessage(
                     self.subject,
