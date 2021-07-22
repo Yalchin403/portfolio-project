@@ -134,8 +134,16 @@ h6 {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out
 }
+.messages {
+            background-color: rgb(243, 164, 164);
+            color: rgb(230, 36, 36);
+            padding: 10px;
+            margin-top: 10px;
+        }
 </style>
-
+<form action="/accounts/account" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
 <div class="page-content page-container" id="page-content">
     <div class="padding">
         <div class="row container d-flex justify-content-center">
@@ -146,11 +154,12 @@ h6 {
                             <div class="card-block text-center text-white">
                                 {% if request.user.profile.profile_photo %}
                                 <div class="m-b-25"> <img src="/media/{{request.user.profile.profile_photo}}" width="100" class="img-radius" alt="User-Profile-Image"> </div>
+                                {{form.profile_photo}}
                                 {% else %}
                                 <div class="m-b-25"> <img src="/static/default.jpg" width="100" class="img-radius" alt="User-Profile-Image"> </div>
+                                {{form.profile_photo}}
                                 {% endif %}
-                                <h6 class="f-w-600">Hembo Tingor</h6>
-                                <p>Web Designer</p> <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                                
                             </div>
                         </div>
                         <div class="col-sm-8">
@@ -159,22 +168,32 @@ h6 {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <p class="m-b-10 f-w-600">Email</p>
-                                        <h6 class="text-muted f-w-400">rntng@gmail.com</h6>
+                                        
+                                        {{form.email}}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <p class="m-b-10 f-w-600">Username</p>
-                                        <h6 class="text-muted f-w-400">98979989898</h6>
+                                        {{form.username}}
                                     </div>
                                 </div>
                                 
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Karma: 111</p>
-                                        <h6 class="text-muted f-w-400">98979989898</h6>
+                                    <div class="col-sm-6"><br>
+                                        <p class="m-b-10 f-w-600">Karma: {{karma}}</p>
+                                        <hr>
                                     </div>
                                 </div>
+                                {% if form.email.errors %}
+                                <div class="messages" >{{form.email.errors}}</div>
+                                {% endif %}
+                                {% if form.username.errors %}
+                                <p class="messages" >{{form.username.errors}}</p>
+                                {% endif %}
+                                <br><button type="submit">Update</button>
+                                
+                                
                         </div>
                     </div>
                 </div>
@@ -182,4 +201,5 @@ h6 {
         </div>
     </div>
 </div>
+</form>
 {% endblock %}

@@ -1,14 +1,15 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
-from .forms import CreateUserForm
-
+from .forms import CreateUserForm, AccountForm
+from .utils import user_karma
+from .models import Profile
 
 class SignUp(View):
     def get(self, request):
@@ -25,7 +26,6 @@ class SignUp(View):
             form.save()
             user = form.cleaned_data.get('username')
             user_obj = User.objects.get(username=user)
-            user_obj.save()
             messages.success(request, f'{user}, account has been successfully created for you')
             return redirect('accounts:signIn')
         else:
@@ -68,6 +68,37 @@ class Profile(View):
     
     def get(self, request):
         if request.user.is_authenticated:
-            form = CreateUserForm()
-            return render(request, 'accounts/account.html', {'form':form})
+            user_obj = request.user
+            username = user_obj.username
+            email = user_obj.email
+            profile_photo = user_obj.profile.profile_photo
+            karma = user_karma(user_obj)
+            form = AccountForm(initial={'username': username, 'email': email, 'profile_photo':profile_photo})
+            context = {'form':form,
+                       "karma": karma}
+            return render(request, 'accounts/account.html', context)
         return redirect('accounts:signIn')
+    
+    def post(self, request):
+        if request.user.is_authenticated:
+            user_obj = request.user
+            form = AccountForm(request.POST, request.FILES)
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                email = form.cleaned_data['email']
+                profile_photo = form.cleaned_data['profile_photo']
+                
+                user_obj.username = username
+                user_obj.email = email
+                username = user_obj.username
+                profile_obj = user_obj.profile
+                profile_obj.profile_photo = profile_photo
+                profile_obj.save()
+                user_obj.save()
+                
+                return redirect("accounts:profile")
+            return redirect("accounts:profile")
+        return redirect("accounts:singIn")
+            
+        
+        

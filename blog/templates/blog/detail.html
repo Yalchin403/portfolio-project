@@ -146,6 +146,8 @@ div.comment-text-sm {
         <a class="navbar-brand" href="{% url 'accounts:signOut' %}">Log Out</a>
       {% else %}
         <a class="navbar-brand" href="{% url 'jobs:home' %}">Yalchin Mammadli</a>
+        <a class="navbar-brand" href="{% url 'accounts:signIn' %}">Log In</a>
+        <a class="navbar-brand" href="{% url 'accounts:signUp' %}">Sign Up</a>
       {% endif %}
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -216,7 +218,7 @@ div.comment-text-sm {
                       {{form|safe}}
                     
                 </div>
-                <button class="btn btn-primary" type="submit">Comment</button>
+                <button id="submit_comment" class="btn btn-primary" type="submit">Comment</button>
                     
 
                 </div>
@@ -343,7 +345,16 @@ div.comment-text-sm {
   }
 </script>
 
+<script>
+  function scroll() {
+    document.getElementById("submit_comment").scrollIntoView();
+  }
+</script>
 
-
+{% if scroll %}}
+<script>
+  scroll();
+</script>
+{% endif %}
 
 </html>

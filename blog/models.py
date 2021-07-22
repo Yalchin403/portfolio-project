@@ -55,7 +55,7 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         try:
             email_body =f"Congrats, you've got new subscriber<br>Name: {self.full_name}"
-            email = "yalchinmammadli@outlook.com"
+            email = "yalchinmammadli@yalchin.info"
 
             msg = EmailMessage(
                 "New Subscription",
@@ -129,3 +129,23 @@ class Comment(MPTTModel):
     
     def __str__(self):
         return f"{self.blog.title} - {self.content} - {self.owner.username}"
+    
+    def save(self, *args, **kwargs):
+        try:
+            email_body =f"New comment to a blog post called {self.blog.title} by:<br>{self.owner}<br>\
+            Go to https://yalchin.info/owner to verify the comment<br>\
+            Comment:<br>{self.content}"
+            email = "yalchinmammadli@yalchin.info"
+
+            msg = EmailMessage(
+                f"New Comment by {self.owner}",
+                email_body,
+                EMAIL_HOST_USER,
+                [email]
+            )
+            msg.content_subtype = "html"
+            msg.send()
+        except:
+            print("Couldn't send the email")
+        
+        return super().save(*args, **kwargs)

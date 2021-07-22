@@ -109,30 +109,46 @@ def error_404(request, exception):
         return render(request,'blog/error_404.html')
     
 def add_comment(request, pk):
-    # content = request.POST.get('content')
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        content = form.cleaned_data['content']
-    blog_obj = get_object_or_404(Blog, pk=pk)
-    owner = request.user
-    comment_obj = Comment(content=content, owner=owner, blog=blog_obj)
-    comment_obj.save()
-    comment_qs = blog_obj.comments.all()
-    form = CommentForm()
-    context = {"form":form, 'd_blog': blog_obj, "comments": comment_qs}
-    return render(request, 'blog/detail.html', context)
+    if request.method == 'POST' and request.user.is_authenticated:
+        owner = request.user
+        blog_obj = get_object_or_404(Blog, pk=pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            if content:
+                try:
+                    already_exists = Comment.objects.filter(content=content).exists()
+                except:
+                    already_exists = False
+                if not already_exists:
+                    comment_obj = Comment(content=content, owner=owner, blog=blog_obj)
+                    comment_obj.save()
+        comment_qs = blog_obj.comments.all()
+        form = CommentForm()
+        context = {"scroll":True, "form":form, 'd_blog': blog_obj, "comments": comment_qs}
+        return render(request, 'blog/detail.html', context)
+    return HttpResponse("Method not allowed or you are not authenticated")
+    
 
 def add_reply(request, pk, b_id):
     content = request.POST.get('replyContent')
-    owner = request.user
     comment_obj = get_object_or_404(Comment, pk=pk)
     blog_obj = get_object_or_404(Blog, pk=b_id)
-    if content:
-        reply_obj = Comment(content=content, owner=owner, parent=comment_obj, blog=blog_obj)
-        reply_obj.save()
-    comment_qs = blog_obj.comments.all()
-    context = { 'd_blog': blog_obj, "comments": comment_qs}
-    return render(request, 'blog/detail.html', context)
+    if request.method == 'POST' and request.user.is_authenticated:
+        if content:
+            try:
+                already_exists = Comment.objects.filter(content=content).exists()
+            except:
+                already_exists = False
+            if not already_exists:
+                owner = request.user
+                reply_obj = Comment(content=content, owner=owner, parent=comment_obj, blog=blog_obj)
+                reply_obj.save()
+        form = CommentForm()
+        comment_qs = blog_obj.comments.all()
+        context = {"scroll":True, "form":form, 'd_blog': blog_obj, "comments": comment_qs}
+        return render(request, 'blog/detail.html', context)
+    return HttpResponse("Method not allowed or you are not authenticated")
 
 def up_vote(request, pk):
     try:
