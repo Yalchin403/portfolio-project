@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Blog, Subscription
+from .models import Blog, Subscription, Comment
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
+from django.http import JsonResponse
+from .forms import CommentForm
+from django.contrib.auth.models import User
 
 
 class BlogView(View):
@@ -20,7 +23,6 @@ class BlogView(View):
        		page_number=str(num_of_pages)
        	elif int(page_number) < 1:
        		page_number = "1"
-
         page_obj = paginator.get_page(page_number)
         context = {'page_obj':page_obj, "page_num":page_number, "num_of_pages":num_of_pages}
         return render(request, 'blog/blogs.html', context)
@@ -29,6 +31,7 @@ class BlogView(View):
 class DetailView(View):
     def get(self, request, slug):
         d_blog = get_object_or_404(Blog, slug=slug)
+        comment_qs = d_blog.comments.all()
         try:
             if not 'viewed_post_%s' % d_blog.id in request.session:
                 d_blog.visit_counter += 1
@@ -38,8 +41,8 @@ class DetailView(View):
 
         except:
             pass # we don't do anything if user already has viewed the post
-
-        context = {'d_blog': d_blog}
+        form = CommentForm()
+        context = {'form': form, 'd_blog': d_blog, "comments": comment_qs}
         return render(request, 'blog/detail.html', context)
 
 
@@ -104,3 +107,80 @@ class SubscribeView(View):
 	
 def error_404(request, exception):
         return render(request,'blog/error_404.html')
+    
+def add_comment(request, pk):
+    # content = request.POST.get('content')
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        content = form.cleaned_data['content']
+    blog_obj = get_object_or_404(Blog, pk=pk)
+    owner = request.user
+    comment_obj = Comment(content=content, owner=owner, blog=blog_obj)
+    comment_obj.save()
+    comment_qs = blog_obj.comments.all()
+    form = CommentForm()
+    context = {"form":form, 'd_blog': blog_obj, "comments": comment_qs}
+    return render(request, 'blog/detail.html', context)
+
+def add_reply(request, pk, b_id):
+    content = request.POST.get('replyContent')
+    owner = request.user
+    comment_obj = get_object_or_404(Comment, pk=pk)
+    blog_obj = get_object_or_404(Blog, pk=b_id)
+    if content:
+        reply_obj = Comment(content=content, owner=owner, parent=comment_obj, blog=blog_obj)
+        reply_obj.save()
+    comment_qs = blog_obj.comments.all()
+    context = { 'd_blog': blog_obj, "comments": comment_qs}
+    return render(request, 'blog/detail.html', context)
+
+def up_vote(request, pk):
+    try:
+        username = request.POST.get("user_obj") # username from ajax call
+        user_obj = get_object_or_404(User, username=username)
+        comment_obj = get_object_or_404(Comment, pk=pk)
+        print(user_obj, comment_obj)
+    except:
+        user_obj = None
+        comment_obj = None
+        
+    if comment_obj and user_obj:
+        if user_obj in comment_obj.up_votes.all():
+            comment_obj.up_votes.remove(user_obj)
+            net_votes = comment_obj.net_votes
+            data = {'up_voted': False,
+                    'net_votes': net_votes}
+            return JsonResponse(data)
+        	
+        if user_obj in comment_obj.down_votes.all():
+            comment_obj.down_votes.remove(user_obj)
+        comment_obj.up_votes.add(user_obj)
+        net_votes = comment_obj.net_votes
+        data = {"up_voted": True,
+                "net_votes": net_votes}
+        return JsonResponse(data)
+
+    
+def down_vote(request, pk):
+    try:
+        user_obj = request.user
+        comment_obj = get_object_or_404(Comment, pk=pk)
+    except:
+        user_obj = None
+        comment_obj = None
+        
+    if comment_obj and user_obj:
+        if user_obj in comment_obj.down_votes.all():
+            comment_obj.down_votes.remove(user_obj)
+            net_votes = comment_obj.net_votes
+            data = {'down_voted': False,
+                    'net_votes': net_votes}
+            return JsonResponse(data)
+        	
+        if user_obj in comment_obj.up_votes.all():
+            comment_obj.up_votes.remove(user_obj)
+        comment_obj.down_votes.add(user_obj)
+        net_votes = comment_obj.net_votes
+        data = {"down_voted": True,
+                "net_votes": net_votes}
+        return JsonResponse(data)

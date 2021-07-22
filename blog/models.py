@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from portfolio.settings import EMAIL_HOST_USER
 from django.urls import reverse
 from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Blog(models.Model):
@@ -64,7 +66,7 @@ class Subscription(models.Model):
             msg.content_subtype = "html"
             msg.send()
         except:
-            pass
+            print("Couldn't send the email")
         
         return super().save(*args, **kwargs)
 
@@ -73,10 +75,10 @@ class Subscription(models.Model):
 class Notification(models.Model):
 
     post = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
-    # emails = [sub_obj.email for sub_obj in sub_objs]
-
     subject = "New article has just been posted!"
     
+    def __str__(self):
+        return self.post.title
 
     def save(self,*args, **kwargs):
         sub_objs = Subscription.objects.all()
@@ -101,12 +103,29 @@ class Notification(models.Model):
                 msg.send()
 
             except:
-                pass
+                print("Couldn't send the email")
 
         return super().save(*args, **kwargs)
 
 
+class Comment(MPTTModel):
+    content = RichTextField(blank=True, null=True, config_name='default')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE,
+                            null=True, blank=True, related_name='children')
+    up_votes = models.ManyToManyField(User, related_name="up_votes")
+    down_votes = models.ManyToManyField(User, related_name="down_votes")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_verified = models.BooleanField(default=False)
     
+    class MPTTMeta:
+        order_insertion_by = ['-created_at']
 
-
-        
+    @property
+    def net_votes(self):
+        return self.up_votes.all().count() - self.down_votes.all().count()
+    
+    def __str__(self):
+        return f"{self.blog.title} - {self.content} - {self.owner.username}"

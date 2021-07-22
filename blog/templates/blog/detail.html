@@ -20,11 +20,81 @@
   <link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
   <link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+  <link rel="stylesheet" href="comments.css">
   <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
   <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
   <meta name="theme-color" content="#563d7c">
+  <link href="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css" rel="stylesheet">
+  <script src="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+  <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+  <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+  <script src="{% static "jquery/jquery.min.js"  %}"></script>
+  <script src="{% static "jquery-ui/jquery-ui.min.js"  %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script>
+    var $j = jQuery.noConflict();
+    </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  
+  <script>
+    
+    function upVote(id) {
+      var user_obj = "{{request.user}}";
+      var url = '/blog/ajax/up_vote/' + id;
+      
+      $j.ajax({
+        url: url,
+        type : 'POST',
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        data: {
+          'user_obj': user_obj
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.up_voted) {
+            document.getElementById(`net_votes${id}`).innerHTML=data.net_votes;
+            document.getElementById(`up_vote${id}`).style.color = "blue";
+            document.getElementById(`down_vote${id}`).style.color = "#212529";
+            
+          }
+          else {
+            document.getElementById(`net_votes${id}`).innerHTML=data.net_votes;
+            document.getElementById(`up_vote${id}`).style.color = "#212529";
+          }
+        }
+      });
+
+    }
 
 
+    function downVote(id) {
+      var user_obj = "{{request.user}}";
+      var url = '/blog/ajax/down_vote/' + id;
+      
+      $j.ajax({
+        url: url,
+        type : 'POST',
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        data: {
+          'user_obj': user_obj
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.down_voted) {
+            document.getElementById(`net_votes${id}`).innerHTML=data.net_votes;
+            document.getElementById(`down_vote${id}`).style.color = "blue";
+            document.getElementById(`up_vote${id}`).style.color = "#212529";
+          }
+          else {
+            document.getElementById(`net_votes${id}`).innerHTML=data.net_votes;
+            document.getElementById(`down_vote${id}`).style.color = "#212529";
+          }
+        }
+      });
+
+    }
+  </script>
   <style>
   .bd-placeholder-img {
     font-size: 1.125rem;
@@ -55,6 +125,10 @@
     height: auto !important;
 }
 
+div.comment-text-sm { 
+  width: 100%; overflow: auto; 
+}
+
   @media (min-width: 768px) {
     .bd-placeholder-img-lg {
       font-size: 3.5rem;
@@ -67,7 +141,12 @@
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{% url 'jobs:home' %}">Yalchin Mammadli</a>
+      {% if request.user.is_authenticated %}
+        <a class="navbar-brand" href="{% url 'accounts:profile' %}">{{request.user.username}}</a>
+        <a class="navbar-brand" href="{% url 'accounts:signOut' %}">Log Out</a>
+      {% else %}
+        <a class="navbar-brand" href="{% url 'jobs:home' %}">Yalchin Mammadli</a>
+      {% endif %}
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -118,6 +197,89 @@
   {% for message in messages %}
     <p class="messages" >{{message}}</p>
   {% endfor %} <br>
+
+{% if request.user.is_authenticated %}
+<h3>Drop a Comment!</h3>
+  
+  <div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-center row">
+        <div class="d-flex flex-column col-md-8">
+          
+            <div class="coment-bottom bg-white p-2 px-4">
+              <form name="newCommentForm" action="{% url 'blog:add_comment' d_blog.id %}" method="POST">
+                {% csrf_token %}
+                {% if request.user.profile.profile_photo %}
+                    <img class="img-fluid img-responsive rounded-circle mr-2" src="/media/{{request.user.profile.profile_photo}}" width="38">
+                {% endif %}
+                <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                  
+                      {{form|safe}}
+                    
+                </div>
+                <button class="btn btn-primary" type="submit">Comment</button>
+                    
+
+                </div>
+              </form>
+                  
+                    
+                <div class="commented-section mt-2">
+                  {% load mptt_tags %}
+                  {% recursetree comments %}
+                  {% if node.owner == request.user or node.is_verified %}
+                    <div class="d-flex flex-row align-items-center commented-user">
+                        <h5 class="mr-2">{{node.owner.username}}</h5><span class="dot mb-1"></span><span class="mb-1 ml-2">{{node.created_at}}</span>
+                    </div>
+                    <div class="comment-text-sm" >
+                      <span class="dot ml-2">
+                        {{node.content|safe}}
+                      </span>
+                    </div>
+                    
+                    <div id="{{ node.id }}" class="reply-section">
+                      
+                      
+                        <div class="d-flex flex-row align-items-center voting-icons">
+                            <!-- <h6 class="ml-2 mt-1">Reply</h6> -->
+                            {% if request.user in node.up_votes.all %}
+                              <div><i onclick="upVote({{ node.id}})" id="up_vote{{node.id}}" class="fa fa-sort-up fa-2x mt-3 hit-voting" style="color: blue;"></i></div>
+                            {% else %}
+                              <div><i onclick="upVote({{ node.id}})" id="up_vote{{node.id}}" class="fa fa-sort-up fa-2x mt-3 hit-voting"></i></div>
+                            {% endif %}
+
+                            <div><span id="net_votes{{node.id}}" class="ml-2">{{node.net_votes}} </span></div>
+                            
+                            {% if request.user in node.down_votes.all %}
+                              <div><i onclick="downVote({{ node.id}})" id="down_vote{{node.id}}" class="fa fa-sort-down fa-2x mb-3 hit-voting" style="color: blue;"></i></div>
+                            {% else %}
+                              <div><i onclick="downVote({{ node.id}})" id="down_vote{{node.id}}" class="fa fa-sort-down fa-2x mb-3 hit-voting"></i></div>
+                            {% endif %}
+                            <button class="ml-2 mt-1" onclick="myFunction({{ node.id}}); loadCk()">Reply</button>
+                            
+                          </div>
+                          <hr>
+                      
+                    </div>
+                    {% if not node.is_leaf_node %}
+                      <div class="children pl-2 pl-md-5">
+                        {{ children }}
+                      </div>
+                    {% endif %}
+                    {% endif %}
+                  {% endrecursetree %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<a href="{% url 'accounts:signIn' %}?next=blog/{{d_blog.slug}}">
+<h4>Sign in To Drop a Comment</h4>
+</a>
+{% endif %}
+
+
+</section>
   </div>
 </main>
 
@@ -144,4 +306,44 @@
 
   gtag('config', 'G-YZWT7RLV6H');
 </script>
+<!-- reply form -->
+
+<script>
+  function myFunction(id) {
+    if (document.contains(document.getElementById("newForm"))) {
+      document.getElementById("newForm").remove();
+    }
+
+    else{
+    var d1 = document.getElementById(id);
+    d1.insertAdjacentHTML('afterend',
+      '<form name="insertedForm" id="newForm" action="/blog/add_reply/'+ id +'/{{d_blog.id}}/" method="POST">\
+                {% csrf_token %}\
+                <div class="d-flex flex-row add-comment-section mt-4 mb-4">\
+                  {% if request.user.profile.profile_photo %}\
+                    <img class="img-fluid img-responsive rounded-circle mr-2" src="/media/{{request.user.profile.profile_photo}}" width="38">\
+                  {% endif %}\
+                </div>\
+                <textarea name="replyContent" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+                <button class="btn btn-primary" type="submit">Comment</button>\
+              </form>\
+              ');
+    }
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+  }
+</script>
+<!-- extra plugin ckeditor -->
+<script>
+  function loadCk() {
+    CKEDITOR.replace("replyContent", {
+ extraPlugins: 'codesnippet',
+ codeSnippet_theme: 'monokai_sublime'
+});
+    
+  }
+</script>
+
+
+
+
 </html>
