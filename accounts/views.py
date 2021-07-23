@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from .forms import CreateUserForm, AccountForm
 from .utils import user_karma
 from .models import Profile
+from django.contrib import messages
+
 
 class SignUp(View):
     def get(self, request):
@@ -61,7 +63,7 @@ class SignIn(View):
 class SignOut(View):
     def get(self, request):
         logout(request)
-        return redirect('jobs:home')
+        return redirect('accounts:signIn')
     
     
 class Profile(View):
@@ -83,17 +85,28 @@ class Profile(View):
         if request.user.is_authenticated:
             user_obj = request.user
             form = AccountForm(request.POST, request.FILES)
+            is_clear = request.POST.get("profile_photo-clear")
             if form.is_valid():
                 username = form.cleaned_data['username']
                 email = form.cleaned_data['email']
+                current_username = request.user.username
+                current_email = request.user.email
+                print(current_email, current_username, email, username)
+                if not email == current_email or not username == current_username:
+                    existing_email = User.objects.filter(email=email).exists()
+                    existing_username = User.objects.filter(username=username).exists()
+                    if existing_email or existing_username:
+                        messages.add_message(request, messages.INFO, 'Email or username already taken...')
+                        return redirect("accounts:profile")
                 profile_photo = form.cleaned_data['profile_photo']
                 
                 user_obj.username = username
                 user_obj.email = email
                 username = user_obj.username
-                profile_obj = user_obj.profile
-                profile_obj.profile_photo = profile_photo
-                profile_obj.save()
+                if profile_photo or is_clear:
+                    profile_obj = user_obj.profile
+                    profile_obj.profile_photo = profile_photo
+                    profile_obj.save()
                 user_obj.save()
                 
                 return redirect("accounts:profile")

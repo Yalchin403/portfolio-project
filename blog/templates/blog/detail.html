@@ -200,10 +200,11 @@ div.comment-text-sm {
     <p class="messages" >{{message}}</p>
   {% endfor %} <br>
 
-{% if request.user.is_authenticated %}
-<h3>Drop a Comment!</h3>
+
   
   <div class="container mt-5 mb-5">
+    {% if request.user.is_authenticated %}
+<h3>Drop a Comment!</h3>
     <div class="d-flex justify-content-center row">
         <div class="d-flex flex-column col-md-8">
           
@@ -220,12 +221,14 @@ div.comment-text-sm {
                 </div>
                 <button id="submit_comment" class="btn btn-primary" type="submit">Comment</button>
                     
-
+  {% else %}
+  <a href="{% url 'accounts:signIn' %}?next=blog/{{d_blog.slug}}">
+  <h4>Sign in To Drop a Comment</h4>
+  </a>
+  {% endif %}
                 </div>
               </form>
                   
-                    
-                <div class="commented-section mt-2">
                   {% load mptt_tags %}
                   {% recursetree comments %}
                   {% if node.owner == request.user or node.is_verified %}
@@ -256,8 +259,9 @@ div.comment-text-sm {
                             {% else %}
                               <div><i onclick="downVote({{ node.id}})" id="down_vote{{node.id}}" class="fa fa-sort-down fa-2x mb-3 hit-voting"></i></div>
                             {% endif %}
+                            {% if request.user.is_authenticated %}
                             <button class="ml-2 mt-1" onclick="myFunction({{ node.id}}); loadCk()">Reply</button>
-                            
+                            {% endif %}
                           </div>
                           <hr>
                       
@@ -274,11 +278,6 @@ div.comment-text-sm {
         </div>
     </div>
 </div>
-{% else %}
-<a href="{% url 'accounts:signIn' %}?next=blog/{{d_blog.slug}}">
-<h4>Sign in To Drop a Comment</h4>
-</a>
-{% endif %}
 
 
 </section>

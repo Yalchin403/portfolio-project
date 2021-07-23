@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
-from .utils import validate_username
+# from .utils import validate_username, validate_email
 
 
 class CreateUserForm(UserCreationForm):
@@ -13,6 +13,6 @@ class CreateUserForm(UserCreationForm):
         
 
 class AccountForm(forms.Form):
-    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class': 'special'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))
     profile_photo = forms.ImageField(required=False)
-    username = forms.CharField(required=True, validators=[validate_username])
+    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'}))

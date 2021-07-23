@@ -141,65 +141,72 @@ h6 {
             margin-top: 10px;
         }
 </style>
-<form action="/accounts/account" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-<div class="page-content page-container" id="page-content">
-    <div class="padding">
-        <div class="row container d-flex justify-content-center">
-            <div class="col-xl-6 col-md-12">
-                <div class="card user-card-full">
-                    <div class="row m-l-0 m-r-0">
-                        <div class="col-sm-4 bg-c-lite-green user-profile">
-                            <div class="card-block text-center text-white">
-                                {% if request.user.profile.profile_photo %}
-                                <div class="m-b-25"> <img src="/media/{{request.user.profile.profile_photo}}" width="100" class="img-radius" alt="User-Profile-Image"> </div>
-                                {{form.profile_photo}}
-                                {% else %}
-                                <div class="m-b-25"> <img src="/static/default.jpg" width="100" class="img-radius" alt="User-Profile-Image"> </div>
-                                {{form.profile_photo}}
-                                {% endif %}
-                                
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <div class="card-block">
-                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">User Info</h6>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Email</p>
-                                        
-                                        {{form.email}}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Username</p>
-                                        {{form.username}}
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-sm-6"><br>
-                                        <p class="m-b-10 f-w-600">Karma: {{karma}}</p>
-                                        <hr>
-                                    </div>
-                                </div>
-                                {% if form.email.errors %}
-                                <div class="messages" >{{form.email.errors}}</div>
-                                {% endif %}
-                                {% if form.username.errors %}
-                                <p class="messages" >{{form.username.errors}}</p>
-                                {% endif %}
-                                <br><button type="submit">Update</button>
-                                
-                                
-                        </div>
+
+<div class="container" >
+<div class="content-section">
+    <div class="media">
+        
+    <form method="POST" action="/accounts/account" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Update Your Info</legend>
+            <div class="form-group">
+
+                {% if form.username.errors %}
+                    {{ form.username }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
                     </div>
-                </div>
+                {% else %}
+                    {{ form.username }}
+                {% endif %}
             </div>
-        </div>
-    </div>
+            <div class="form-group">
+                
+                {% if form.email.errors %}
+                    {{ form.email }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+
+                {% if request.user.profile.profile_photo and request.user.profile.profile_photo.name != 'False' %}
+                <div class="m-b-25"> <img src="/media/{{request.user.profile.profile_photo}}" width="100" class="rounded-circle account-img" alt="User-Profile-Image"> </div>
+                
+                {% else %}
+                <div class="m-b-25"> <img src="/static/default.jpg" width="100" class="rounded-circle account-img" alt="User-Profile-Image"> </div>
+                
+                {% endif %}
+                
+                {{ form.profile_photo }}
+                
+                {% if form.profile_photo.errors %}
+                    {% for error in form.profile_photo.errors %}
+                    <span class="text-danger">{{error}}</span>
+                    {% endfor%}
+                {% endif %}
+
+               <br>
+                    {% for message in messages %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endfor%}
+                
+                <br><br>
+                
+                <div class="form-group">
+                    <br><button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+        </fieldset>
+        
+    </form>
+  </div>
 </div>
-</form>
 {% endblock %}
