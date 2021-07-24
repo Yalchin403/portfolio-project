@@ -236,6 +236,7 @@ div.comment-text-sm {
                   {% recursetree comments %}
                   {% if node.owner == request.user or node.is_verified %}
                     <div class="d-flex flex-row align-items-center commented-user">
+                      <img class="img-fluid img-responsive rounded-circle mr-2" src="/media/{{node.owner.profile.profile_photo}}" width="38">
                         <h5 class="mr-2">{{node.owner.username}}</h5><span class="dot mb-1"></span><span class="mb-1 ml-2">{{node.created_at}}</span>
                     </div>
                     <div class="comment-text-sm" >

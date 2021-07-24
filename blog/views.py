@@ -36,7 +36,6 @@ class DetailView(View):
             if not 'viewed_post_%s' % d_blog.id in request.session:
                 d_blog.visit_counter += 1
                 request.session['viewed_post_%s' % d_blog.id] = True
-                # set_cookie(request, 'viewed_post_%s' % d_blog.id)
                 d_blog.save()
 
         except:
