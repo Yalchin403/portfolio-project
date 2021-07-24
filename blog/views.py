@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 class BlogView(View):
     def get(self, request):
         blogs = Blog.objects.order_by('-time_pub').all()
-        per_page = 5
+        per_page = 6
         paginator = Paginator(blogs, per_page)
         num_of_pages = paginator.num_pages
         page_number = request.GET.get('page')
