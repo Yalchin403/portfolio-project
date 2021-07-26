@@ -147,5 +147,28 @@ class Comment(MPTTModel):
             msg.send()
         except:
             print("Couldn't send the email")
+            
+        if self.parent:
+            post_url = self.blog.get_absolute_url()
+            comment_owner_email = self.parent.owner.email
+            try:
+                email_body =f"New reply to your comment added you can \
+                find it in the comment section of this blog post <br>\
+                Your comment:<br>{self.parent.content}<br>\
+                Replied by:<br>{self.owner}\
+                Go to https://yalchin.info/{post_url} to the reply<br>\
+                "
+                email = comment_owner_email
+
+                msg = EmailMessage(
+                    f"New Reply by {self.owner}",
+                    email_body,
+                    EMAIL_HOST_USER,
+                    [email]
+                )
+                msg.content_subtype = "html"
+                msg.send()
+            except:
+                print("Couldn't send the email")
         
         return super().save(*args, **kwargs)
