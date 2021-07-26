@@ -119,6 +119,7 @@ class Comment(MPTTModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
+    boss_notified = models.BooleanField(default=False)
     
     class MPTTMeta:
         order_insertion_by = ['-created_at']
@@ -131,24 +132,27 @@ class Comment(MPTTModel):
         return f"{self.blog.title} - {self.content} - {self.owner.username}"
     
     def save(self, *args, **kwargs):
-        try:
-            email_body =f"New comment to a blog post called {self.blog.title} by:<br>{self.owner}<br>\
-            Go to https://yalchin.info/owner to verify the comment<br>\
-            Comment:<br>{self.content}"
-            email = "yalchinmammadli@yalchin.info"
+        
+        if not self.boss_notified:
+            try:
+                email_body =f"New comment to a blog post called {self.blog.title} by:<br>{self.owner}<br>\
+                Go to https://yalchin.info/owner to verify the comment<br>\
+                Comment:<br>{self.content}"
+                email = "yalchinmammadli@yalchin.info"
 
-            msg = EmailMessage(
-                f"New Comment by {self.owner}",
-                email_body,
-                EMAIL_HOST_USER,
-                [email]
-            )
-            msg.content_subtype = "html"
-            msg.send()
-        except:
-            print("Couldn't send the email")
+                msg = EmailMessage(
+                    f"New Comment by {self.owner}",
+                    email_body,
+                    EMAIL_HOST_USER,
+                    [email]
+                )
+                msg.content_subtype = "html"
+                msg.send()
+                self.boss_notified = True
+            except:
+                print("Couldn't send the email")
             
-        if self.parent:
+        if self.parent and self.is_verified:
             post_url = self.blog.get_absolute_url()
             comment_owner_email = self.parent.owner.email
             try:
