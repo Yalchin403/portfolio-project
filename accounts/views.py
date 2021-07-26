@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from .forms import CreateUserForm, AccountForm
-from .utils import user_karma
+from .utils import user_karma, auto_subscribe
 from .models import Profile
 from django.contrib import messages
 
@@ -28,6 +28,7 @@ class SignUp(View):
             form.save()
             user = form.cleaned_data.get('username')
             user_obj = User.objects.get(username=user)
+            auto_subscribe(user_obj)
             messages.success(request, f'{user}, account has been successfully created for you')
             return redirect('accounts:signIn')
         else:
