@@ -264,7 +264,8 @@ div.comment-text-sm {
                               <div><i onclick="downVote({{ node.id}})" id="down_vote{{node.id}}" class="fa fa-sort-down fa-2x mb-3 hit-voting"></i></div>
                             {% endif %}
                             {% if request.user.is_authenticated %}
-                            <button class="ml-2 mt-1" onclick="myFunction({{ node.id}}); loadCk()">Reply</button>
+                            <pre> </pre>
+                            <button class="btn btn-outline-info" onclick="myFunction({{ node.id}}); loadCk()">Reply</button>
                             {% endif %}
                           </div>
                           <hr>
