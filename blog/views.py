@@ -65,7 +65,7 @@ class SearchView(View):
 			searched = "Search Blog Post"
 			objs = Blog.objects.order_by('-time_pub').all()
 
-		per_page = 5
+		per_page = 6
 		paginator = Paginator(objs, per_page)
 		num_of_pages = paginator.num_pages
 		page_number = request.GET.get('page')
