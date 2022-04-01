@@ -131,11 +131,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-try:
-    from .local_settings import *
-except ImportError:
-    pass
 
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_CONFIGS = {
          # django-ckeditor uses the default configuration by default
@@ -162,13 +159,54 @@ CKEDITOR_CONFIGS = {
             ['NumberedList', 'BulletedList'],
                          # Maximize
             ['Maximize'],
-            [ 'Source' ],
+            ['Source'],
             ['Table', 'Tabletools'],
             ['Image']
         ],
-                 # Add code block plugin
+        # Add code block plugin
+        'codeSnippet_languages': {
+            'python': 'Python <3',
+            'c': 'C',
+            'cpp': 'C++',
+            'csharp': 'C#',
+            'bash': 'Bash',
+            'aspnet': 'ASP.NET',
+            'dart': 'Dart',
+            'docker': 'Docker',
+            'flutter': 'Flutter',
+            'fortran': 'Fortran',
+            'haskel': 'Haskel',
+            'markup': 'HTML',
+            'http': 'HTTP',
+            'git': 'Git',
+            'go': 'Golang',
+            'java': 'Java',
+            'javascript': 'JavaScript',
+            'makefile':'Makefile',
+            'matlab': 'MATLAB',
+            'nginx': 'Nginx',
+            'pascal': 'Pascal',
+            'perl': "Perl",
+            'php': 'PHP',
+            'rust': 'Rust',
+            'ruby': 'Ruby',
+            'r': 'R',
+            'sas': 'SAS',
+            'scala': 'Scala',
+            'scheme': 'Scheme',
+            'sql': 'SQL',
+            'swift': 'Swift',
+            'vim': 'Vim',
+            'yml': 'YML'
+        },
        
-        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'table','clipboard', 'format', 'image', 'tabletools']),
+        'extraPlugins': ','.join(['codesnippet', 'prism', 'widget', 'lineutils', 'table', 'clipboard', 'format',
+                                  'image', 'tabletools']),
 
     }
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

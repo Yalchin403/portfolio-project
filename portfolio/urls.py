@@ -22,6 +22,8 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.views.static import serve 
 
+admin.autodiscover()
+admin.site.enable_nav_sidebar = False
 
 handler404 = 'blog.views.error_404'
 
@@ -30,5 +32,5 @@ urlpatterns = [
     path('', include('jobs.urls')),
     path('blog/', include('blog.urls'), name='blog'),
     path('accounts/', include('accounts.urls'), name='accounts'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
