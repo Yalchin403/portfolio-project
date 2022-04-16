@@ -105,7 +105,7 @@ class SubscribeView(View):
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	
 def error_404(request, exception):
-        return render(request,'blog/error_404.html')
+        return render(request,'blog/error2_404.html')
     
 def add_comment(request, pk):
     if request.method == 'POST' and request.user.is_authenticated:
