@@ -101,39 +101,39 @@
     </div>
 
 <h2 class="text-center">Latest Posts</h2>
-    <div class="container">
+
       
       <hr>
 
               <div class="container">
-                <div class="row">
+                <div class="row g-3">
                   {% for blog in page_obj %}
-                  <div class="col-md-4">
+                  <div class="col-12 col-md-6 col-lg-4">
 
 
-                    <div class="card" style="width: 18rem;">
-                        
-                           <a href="{{blog.slug}}"><img height="200px" class="card-img-top" src="{{blog.image.url}}" alt="Card image cap"></a>
-                                <div class="card-body">
-                                  <h5 class="card-title">{{blog.title}}</h5>
-                                  <p class="card-text">{{blog.summary|striptags|safe}}</p>
-                                </div>
+                      <div class="card" style="width: 18rem;">
+                          
+                             <a href="{{blog.slug}}"><img height="200px" width="100%" class="card-img-top" src="{{blog.image.url}}" alt="Card image cap"></a>
+                                  <div class="card-body">
+                                    <h5 class="card-title">{{blog.title}}</h5>
+                                    <p class="card-text">{{blog.summary|striptags|safe}}</p>
+                                  </div>
 
-                                <ul class="list-group list-group-flush">
-                                  <li class="list-group-item">
-                                        <img src="{% static 'eye-fill.svg' %}" >
-                                        {{blog.visit_counter}}
-                                  </li>
-                                  <li class="list-group-item">{{blog.pretty_pub}}</li>
-                                  
-                                </ul>
+                                  <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                          <img src="{% static 'eye-fill.svg' %}" >
+                                          {{blog.visit_counter}}
+                                    </li>
+                                    <li class="list-group-item">{{blog.pretty_pub}}</li>
+                                    
+                                  </ul>
 
-                                <div class="card-body">
-                                  <a href="/blog/{{blog.slug}}/" class="card-link">Read more...</a>
-                                 
-                                </div>
+                                  <div class="card-body">
+                                    <a href="/blog/{{blog.slug}}/" class="card-link">Read more...</a>
+                                   
+                                  </div>
 
-                    </div><br>
+                      </div><br>
 
 
                     </div>
@@ -191,7 +191,7 @@
 
           
 
-    </div>
+
     </section>
   </main>
 

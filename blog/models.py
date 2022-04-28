@@ -14,7 +14,7 @@ class Blog(models.Model):
     time_pub = models.DateTimeField()
     image = models.ImageField(upload_to='images/')
     descript = RichTextField(blank=True, null=True)
-    slug = models.SlugField(null=True, unique=True, blank=True)
+    slug = models.SlugField(null=True, unique=True, blank=True, max_length=200)
     visit_counter = models.IntegerField(default=0)
 
     def __str__(self):
