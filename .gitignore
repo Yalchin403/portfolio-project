@@ -1,7 +1,9 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
-/media
+
+media/*
+!/media/default.jpg
 /static
 ### Django ###
 **/migrations/**

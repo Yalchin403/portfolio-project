@@ -16,6 +16,7 @@ class Blog(models.Model):
     descript = RichTextField(blank=True, null=True)
     slug = models.SlugField(null=True, unique=True, blank=True, max_length=200)
     visit_counter = models.IntegerField(default=0)
+    is_draft = models.BooleanField(default=True, null=True, blank=True)
 
     def __str__(self):
         return self.title

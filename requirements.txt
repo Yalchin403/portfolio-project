@@ -6,6 +6,5 @@ django-js-asset==2.0.0
 django-mptt==0.13.4
 django-social-share==2.2.1
 Pillow==9.0.1
-pkg_resources==0.0.0
 pytz==2022.1
 sqlparse==0.4.2

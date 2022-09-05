@@ -34,6 +34,7 @@ class SignUp(View):
         else:
             return render(request, 'accounts/signup.html', {'form':form})
 
+
 class SignIn(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -77,6 +78,8 @@ class Profile(View):
             profile_photo = user_obj.profile.profile_photo
             karma = user_karma(user_obj)
             form = AccountForm(initial={'username': username, 'email': email, 'profile_photo':profile_photo})
+            
+
             context = {'form':form,
                        "karma": karma}
             return render(request, 'accounts/account.html', context)
@@ -92,15 +95,26 @@ class Profile(View):
                 email = form.cleaned_data['email']
                 current_username = request.user.username
                 current_email = request.user.email
-                print(current_email, current_username, email, username)
-                if not email == current_email or not username == current_username:
+                existing_email = False
+                existing_username = False
+
+                if not email == current_email:
                     existing_email = User.objects.filter(email=email).exists()
+                    
+                if not username == current_username:
                     existing_username = User.objects.filter(username=username).exists()
-                    if existing_email or existing_username:
-                        messages.add_message(request, messages.INFO, 'Email or username already taken...')
-                        return redirect("accounts:profile")
-                profile_photo = form.cleaned_data['profile_photo']
+
+                if existing_email or existing_username:
+                    messages.add_message(request, messages.INFO, 'Email or username already taken...')
+
+                    return redirect("accounts:profile")
                 
+                if username == current_username and email==current_email and not is_clear:
+                    messages.add_message(request, messages.INFO, 'Please do not forget to change one of the fields before you submit the form...')
+
+                    return redirect("accounts:profile")
+
+                profile_photo = form.cleaned_data['profile_photo']
                 user_obj.username = username
                 user_obj.email = email
                 username = user_obj.username

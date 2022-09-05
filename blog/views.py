@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 
 class BlogView(View):
 	def get(self, request):
-		blogs = Blog.objects.order_by('-time_pub').all()
+		blogs = Blog.objects.filter(is_draft=False).order_by('-time_pub').all()
 		per_page = 6
 		paginator = Paginator(blogs, per_page)
 		num_of_pages = paginator.num_pages
@@ -30,7 +30,7 @@ class BlogView(View):
 		
 class DetailView(View):
 	def get(self, request, slug):
-		d_blog = get_object_or_404(Blog, slug=slug)
+		d_blog = get_object_or_404(Blog, slug=slug, is_draft=False)
 		comment_qs = d_blog.comments.all()
 		try:
 			if not 'viewed_post_%s' % d_blog.id in request.session:
@@ -53,7 +53,7 @@ class SearchView(View):
 			for search in search_list:
 				objs = Blog.objects.order_by('-time_pub').filter(
 					Q(title__icontains=search) | Q(descript__icontains=search)
-					).distinct()
+					).distinct().filter(is_draft=False)
 
 			no_result = False
 			
@@ -63,7 +63,7 @@ class SearchView(View):
 		else:
 			messages.error(request, 'You cannot leave empty...')
 			searched = "Search Blog Post"
-			objs = Blog.objects.order_by('-time_pub').all()
+			objs = Blog.objects.order_by('-time_pub').filter(is_draft=False)
 
 		per_page = 6
 		paginator = Paginator(objs, per_page)
@@ -110,7 +110,7 @@ def error_404(request, exception):
 def add_comment(request, pk):
 	if request.method == 'POST' and request.user.is_authenticated:
 		owner = request.user
-		blog_obj = get_object_or_404(Blog, pk=pk)
+		blog_obj = get_object_or_404(Blog, pk=pk, is_draft=False)
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			content = form.cleaned_data['content']
@@ -132,7 +132,7 @@ def add_comment(request, pk):
 def add_reply(request, pk, b_id):
 	content = request.POST.get('replyContent')
 	comment_obj = get_object_or_404(Comment, pk=pk)
-	blog_obj = get_object_or_404(Blog, pk=b_id)
+	blog_obj = get_object_or_404(Blog, pk=b_id, is_draft=False)
 	if request.method == 'POST' and request.user.is_authenticated:
 		if content:
 			try:

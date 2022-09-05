@@ -178,13 +178,7 @@ h6 {
             </div>
             <div class="form-group">
 
-                {% if request.user.profile.profile_photo and request.user.profile.profile_photo.name != 'False' %}
-                <div class="m-b-25"> <img src="/media/{{request.user.profile.profile_photo}}" width="100" class="rounded-circle account-img" alt="User-Profile-Image"> </div>
-                
-                {% else %}
-                <div class="m-b-25"> <img src="/static/default.jpg" width="100" class="rounded-circle account-img" alt="User-Profile-Image"> </div>
-                
-                {% endif %}
+                <div class="m-b-25"> <img src="{{request.user.profile.profile_photo.url}}" width="100" class="rounded-circle account-img" alt="User-Profile-Image"> </div>
                 
                 {{ form.profile_photo }}
                 

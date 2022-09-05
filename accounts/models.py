@@ -13,7 +13,7 @@ class Profile(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.profile_photo:
-            self.profile_photo = "media/default.jpg"
+            self.profile_photo = "default.jpg"
         return super().save(*args, **kwargs)
     
 @receiver(post_save, sender=User)
