@@ -1,12 +1,14 @@
+import json
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
 from django.core.mail import send_mail
-from portfolio.settings import EMAIL_HOST_USER
 from django.urls import reverse
-from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
+from django.core.mail import EmailMessage
+from portfolio.settings import EMAIL_HOST_USER
+from celery import shared_task
 
 
 class Blog(models.Model):
@@ -77,34 +79,13 @@ class Notification(models.Model):
 
     post = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
     subject = "New article has just been posted!"
-    
+
     def __str__(self):
         return self.post.title
 
     def save(self,*args, **kwargs):
-        sub_objs = Subscription.objects.all()
-        post_url = self.post.get_absolute_url()
-        for sub_obj in sub_objs:
-
-            try:
-
-                email_body =f'Hello, dear <b>{sub_obj.full_name}</b>,<br>New article on <b>"{self.post.title}"</b> has just been posted on\
-                Yalchin`s Blog!<br>See the post by following link below:<br>\
-                Link to post: https://yalchin.info{post_url}<br>Thanks for your interest!<br>Best,<br>Yalchin Mammadli'
-                
-                email = sub_obj.email
-
-                msg = EmailMessage(
-                    self.subject,
-                    email_body,
-                    EMAIL_HOST_USER,
-                    [email]
-                )
-                msg.content_subtype = "html"
-                msg.send()
-
-            except:
-                print("Couldn't send the email")
+        # send notification to subscribers on the background
+        send_notification_2_subs.delay(self.post.id, self.subject)
 
         return super().save(*args, **kwargs)
 
@@ -177,3 +158,32 @@ class Comment(MPTTModel):
                 print("Couldn't send the email")
         
         return super().save(*args, **kwargs)
+
+
+@shared_task
+def send_notification_2_subs(post_id, subject):
+    subs_objs = Subscription.objects.all()
+
+    for sub_obj in subs_objs:
+
+        try:
+            post_obj = Blog.objects.get(id=post_id)
+            post_url = post_obj.get_absolute_url()
+            post_title = post_obj.title
+            email_body =f'Hello, dear <b>{sub_obj.full_name}</b>,<br>New article on <b>"{post_title}"</b> has just been posted on\
+            Yalchin`s Blog!<br>See the post by following link below:<br>\
+            Link to post: https://yalchin.info{post_url}<br>Thanks for your interest!<br>Best,<br>Yalchin Mammadli'
+            
+            email = sub_obj.email
+
+            msg = EmailMessage(
+                subject,
+                email_body,
+                EMAIL_HOST_USER,
+                [email]
+            )
+            msg.content_subtype = "html"
+            msg.send()
+
+        except:
+            print("Couldn't send the email")
