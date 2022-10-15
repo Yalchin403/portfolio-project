@@ -1,0 +1,15 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - name: Run Tests
+      run: |
+        python manage.py test
