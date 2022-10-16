@@ -13,3 +13,6 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+    - name: Run Server
+      run:
+        docker-compose up -d --build
