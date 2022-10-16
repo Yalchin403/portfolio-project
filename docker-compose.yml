@@ -1,0 +1,70 @@
+version: '3'
+services:
+  db:
+    image: "postgres:14"
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+  migration:
+      build: .
+      command:  bash -c "python3 manage.py makemigrations && python3 manage.py migrate"
+      depends_on: 
+        - db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  redis:
+      image: "redis:latest"
+      ports:
+        - "6379:6379"
+      depends_on:
+        - db
+      restart: always
+      
+  worker:
+    image: madefire/chordtest
+    build:
+      context: ./
+    command: bash -c "celery -A portfolio worker -l INFO"
+    environment:
+      - BROKER_URL=redis://redis:6379/0
+      - RESULT_BACKEND=redis://redis:6379/0
+      - C_FORCE_ROOT=true
+    volumes:
+      - ./:/app/
+    depends_on:
+      - db
+      - redis
+      - web
+    restart: always
+  
+  web:
+    build:
+      context: .
+    
+    ports:
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+
+    env_file: .env
+    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+    links:
+      - db:db
+      - redis:redis
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+volumes:
+  pgdata:
