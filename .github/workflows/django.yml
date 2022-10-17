@@ -11,5 +11,7 @@ jobs:
 
     steps:
     - name: Run Server
-      run:
+      run: |
+        echo "Current working dir:"
+        pwd
         docker-compose up -d --build
