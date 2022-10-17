@@ -115,7 +115,7 @@ celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
-
+portfoliodb.sql
 # Environments
 .env
 .venv
