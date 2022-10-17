@@ -266,3 +266,6 @@ JAZZMIN_SETTINGS = {
     "default_icon_children": "fas fa-circle",
     "show_ui_builder": True,
 }
+
+# production csrf conf
+CSRF_TRUSTED_ORIGINS=['https://*.yalchin.info']
