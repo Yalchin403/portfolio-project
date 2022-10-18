@@ -29,5 +29,5 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Configure and Run
       run: |
-        mv ~/portfolio-project/.env ./.env
+        cp ~/portfolio-project/.env ./.env
         docker-compose up -d --build
