@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - name: fix permissions
-      run:
+      run: |
         cd ~/deployPortfolio
         sudo chown -R $USER:$USER *
         cd _work/portfolio-project/portfolio-project
