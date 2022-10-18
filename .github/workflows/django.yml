@@ -17,8 +17,10 @@ jobs:
         python-version: [3.8]
 
     steps:
-    - name: Change Permission
-    - run: sudo chown -R $USER:$USER /home/hackU/deployPortfolio/_work/portfolio-project
+    - name: fix permissions
+      run: |
+        whoami
+        chmod 777 /home/hackU/deployPortfolio/_work/portfolio-project/portfolio-project/
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
