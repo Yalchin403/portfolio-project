@@ -30,7 +30,6 @@ DEBUG = False
 # Application definition
 
 INSTALLED_APPS = [
-    "whitenoise.runserver_nostatic",
     'jazzmin',
     'blog.apps.BlogConfig',
     'jobs.apps.JobsConfig',
@@ -39,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
     'ckeditor',
     'django_social_share',
