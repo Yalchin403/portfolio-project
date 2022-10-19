@@ -13,6 +13,14 @@ services:
       command:  bash -c "python3 manage.py makemigrations && python3 manage.py migrate"
       depends_on: 
         - db
+  
+  collectstatic:
+      build: .
+      command:  bash -c "python3 manage.py collectstatic --no-input"
+      volumes:
+      - type: bind
+        source: .
+        target: /app
 
   adminer:
     image: adminer
@@ -43,6 +51,7 @@ services:
       - db
       - redis
       - web
+      - collectstatic
     restart: always
   
   web:
