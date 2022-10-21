@@ -2,6 +2,7 @@ import json
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -15,7 +16,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=200)
     time_pub = models.DateTimeField()
     image = models.ImageField(upload_to='images/')
-    descript = RichTextField(blank=True, null=True)
+    descript = RichTextUploadingField(blank=True, null=True)
     slug = models.SlugField(null=True, unique=True, blank=True, max_length=200)
     visit_counter = models.IntegerField(default=0)
     is_draft = models.BooleanField(default=True, null=True, blank=True)

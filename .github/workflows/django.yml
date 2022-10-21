@@ -27,6 +27,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+        clean: false
     - name: Configure and Run
       run: |
         cp ~/portfolio-project/.env ./.env

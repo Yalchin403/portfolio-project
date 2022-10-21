@@ -25,7 +25,7 @@ EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS=True
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
     'ckeditor',
+    'ckeditor_uploader',
     'django_social_share',
     'accounts',
     'mptt',
@@ -266,6 +267,11 @@ JAZZMIN_SETTINGS = {
     "default_icon_children": "fas fa-circle",
     "show_ui_builder": True,
 }
+CKEDITOR_UPLOAD_PATH = 'ck_uploads/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
+
 
 # production csrf conf
 CSRF_TRUSTED_ORIGINS=['https://*.yalchin.info']
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
