@@ -22,7 +22,9 @@ jobs:
         sudo chown -R $USER:$USER ${{ github.workspace }}
     - name: back up media before reset
       run: |
-        mkdir -p ../../media_backup
+        cd ~/deployPortfolio/_work
+        mkdir -p media_backup
+        cd ${{ github.workspace }}
         cp -R media/* ../..media_backup/
     - uses: actions/checkout@v3
       with:
