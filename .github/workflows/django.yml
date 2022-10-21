@@ -22,11 +22,13 @@ jobs:
         cd ~/deployPortfolio
         cd _work/portfolio-project/portfolio-project
     - uses: actions/checkout@v3
+      with:
+        clean: false
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        clean: false
     - name: Configure and Run
       run: |
         cp ~/portfolio-project/.env ./.env
