@@ -20,7 +20,6 @@ jobs:
     - name: fix permissions
       run: |
         cd ~/deployPortfolio
-        sudo chown -R $USER:$USER *
         cd _work/portfolio-project/portfolio-project
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
