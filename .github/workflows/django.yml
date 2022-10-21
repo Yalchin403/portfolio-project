@@ -19,9 +19,11 @@ jobs:
     steps:
     - name: fix permissions
       run: |
-        cd ~/deployPortfolio
         sudo chown -R $USER:$USER ${{ github.workspace }}
-        cd _work/portfolio-project/portfolio-project
+    - name: back up media before reset
+      run: |
+        mkdir -p ../../media_backup
+        cp -R media/* ../..media_backup/
     - uses: actions/checkout@v3
       with:
         clean: false
@@ -34,3 +36,6 @@ jobs:
       run: |
         cp ~/portfolio-project/.env ./.env
         docker-compose up -d --build
+    - name: Restore media files
+      run: |
+        cp -R ../../media_backup/* media/
