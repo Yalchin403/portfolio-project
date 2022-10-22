@@ -1,3 +1,4 @@
+import profile
 from django.shortcuts import render
 
 # Create your views here.
@@ -90,6 +91,7 @@ class Profile(View):
             user_obj = request.user
             form = AccountForm(request.POST, request.FILES)
             is_clear = request.POST.get("profile_photo-clear")
+
             if form.is_valid():
                 username = form.cleaned_data['username']
                 email = form.cleaned_data['email']
@@ -97,6 +99,7 @@ class Profile(View):
                 current_email = request.user.email
                 existing_email = False
                 existing_username = False
+                profile_photo = form.cleaned_data['profile_photo']
 
                 if not email == current_email:
                     existing_email = User.objects.filter(email=email).exists()
@@ -109,19 +112,21 @@ class Profile(View):
 
                     return redirect("accounts:profile")
                 
-                if username == current_username and email==current_email and not is_clear:
+                if username == current_username and email==current_email and not is_clear and not profile_photo:
                     messages.add_message(request, messages.INFO, 'Please do not forget to change one of the fields before you submit the form...')
 
                     return redirect("accounts:profile")
 
-                profile_photo = form.cleaned_data['profile_photo']
+                
                 user_obj.username = username
                 user_obj.email = email
                 username = user_obj.username
+
                 if profile_photo or is_clear:
                     profile_obj = user_obj.profile
                     profile_obj.profile_photo = profile_photo
                     profile_obj.save()
+
                 user_obj.save()
                 
                 return redirect("accounts:profile")
