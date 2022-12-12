@@ -2,7 +2,7 @@ name: Django CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "test_workflow"]
 
 permissions:
   contents: read
@@ -19,16 +19,25 @@ jobs:
     steps:
     - name: fix permissions
       run: |
-        cd ~/deployPortfolio
-        sudo chown -R $USER:$USER *
-        cd _work/portfolio-project/portfolio-project
+        sudo chown -R $USER:$USER ${{ github.workspace }}
+    - name: back up media before reset
+      run: |
+        cd ~/deployPortfolio/_work
+        mkdir -p media_backup
+        cd ${{ github.workspace }}
+        cp -R media/* ~/deployPortfolio/_work/media_backup/
     - uses: actions/checkout@v3
+      with:
+        clean: false
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        clean: false
     - name: Configure and Run
       run: |
         cp ~/portfolio-project/.env ./.env
         docker-compose up -d --build
+    - name: Restore media files
+      run: |
+        cp -R ~/deployPortfolio/_work/media_backup/* media/
