@@ -4,8 +4,14 @@ from django.db import models
 
 class Job(models.Model):
     title = models.CharField(max_length=200, null=True)
-    image = models.ImageField(upload_to='images/')
-    summary = models.CharField(max_length=400)
-    start_time = models.DateTimeField(null=True)
+    description = models.TextField()
+    company_name = models.CharField(max_length=50)
+    date_from = models.DateField()
+    date_to = models.DateField(null=True, blank=True)
+
+    @property
+    def description_bullet_points(self)-> list:
+        return  self.description.replace('\n', '').split('-')
+
     def __str__(self):
         return self.title

@@ -272,51 +272,19 @@
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <h3 class="resume-title">Professional Experience</h3>
-            <div class="resume-item">
-              <h4>Python Developer</h4>
-              <h5>02/2022 - Present</h5>
-              <p><em>Alerian Inch, USA (remote) </em></p>
-              <ul>
-                <li>Building various software from web application to games.</li>
-                <li>Writing necessary algorithms required for software to function. </li>
-              </ul>
-            </div>
-            
-            <div class="resume-item">
-              <h4>Django Developer</h4>
-              <h5>2020/02 - 2022/01</h5>
-              <p><em>Osaat</em></p>
-              <ul>
-                <li>
-                  A one-time project I've built (later I worked as a project supporter and maintainer) is an
-                  advertising website in which there are some premium and VIP packages so including a
-                  payment gateway and a bunch of background tasks using celery.
-                </li>
-              </ul>
-            </div>
-          
-            <div class="resume-item">
-              <h4>Django Developer</h4>
-              <h5>2019/05 - 2020/01</h5>
-              <p><em>Engine LTD</em></p>
-              <ul>
-                <li>
-                  Building an automated error-monitoring website, to track all the errors related to
-                electronic devices, and generating automated error reports based on the monitored
-                errors.
-                </li>
-              </ul>
-            </div>
 
-            <div class="resume-item">
-              <h4>Python Developer</h4>
-              <h5>2019/02 - 2019/05</h5>
-              <p><em>researchlaw.az - LegalPro, Baku (remote)</em></p>
-              <ul>
-                <li>Mainly dealing with refactoring project, to make it more otimized.</li>
-                <li>Accomplishing proper data parsing and data extracting.</li>
-              </ul>
-            </div>
+            {% for job in jobs %}
+              <div class="resume-item">
+                <h4>{{job.title}}</h4>
+                <h5>{{job.date_from}} - {% if job.date_to %} {{job.date_to}} {% else %} Present {% endif %}</h5>
+                <p><em>{{job.company_name}}</em></p>
+                <ul>
+                  {% for job_description_bullet_point in job.description_bullet_points %}
+                    <li>{{job_description_bullet_point}}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
 
           </div>
         </div>
