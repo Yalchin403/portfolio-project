@@ -5,7 +5,7 @@ on:
     branches: [ "master", "test_workflow"]
 
 permissions:
-  contents: read
+  contents: read-all
 
 jobs:
   build:
