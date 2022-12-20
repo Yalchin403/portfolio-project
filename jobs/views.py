@@ -9,8 +9,8 @@ from django.contrib import messages
 
 class HomeView(View):
     def get(self, request):
-        jobs = Job.objects.order_by('-start_time')
-        return render(request, 'jobs/new_home.html')
+        jobs = Job.objects.order_by('-date_from')
+        return render(request, 'jobs/new_home.html', {"jobs":jobs})
 
 
 class ContactView(View):

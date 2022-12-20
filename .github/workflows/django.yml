@@ -40,4 +40,4 @@ jobs:
         docker-compose up -d --build
     - name: Restore media files
       run: |
-        cp -R ~/deployPortfolio/_work/media_backup/* media/
+        sudo cp -R ~/deployPortfolio/_work/media_backup/* media/
