@@ -38,6 +38,13 @@ class Blog(models.Model):
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import BlogResource
+
+        return {
+            "blogs": ("blog resources", BlogResource)
+        }
 
 
 
@@ -47,6 +54,14 @@ class Image(models.Model):
 
     def __str__(self):
         return self.img_name
+    
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import ImageResource
+
+        return {
+            "images": ("image resources", ImageResource)
+        }
 
 
 class Subscription(models.Model):
@@ -74,6 +89,13 @@ class Subscription(models.Model):
         
         return super().save(*args, **kwargs)
 
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import SubscriptionResource
+
+        return {
+            "subscriptions": ("subscription resources", SubscriptionResource)
+        }
 
 
 class Notification(models.Model):
@@ -89,6 +111,15 @@ class Notification(models.Model):
         send_notification_2_subs.delay(self.post.id, self.subject)
 
         return super().save(*args, **kwargs)
+
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import NotificationResource
+
+        return {
+            "notifications": ("notification resources", NotificationResource)
+        }
+    
 
 
 class Comment(MPTTModel):
@@ -159,7 +190,14 @@ class Comment(MPTTModel):
                 print("Couldn't send the email")
         
         return super().save(*args, **kwargs)
+    
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import CommentResource
 
+        return {
+            "comments": ("comment resources", CommentResource)
+        }
 
 @shared_task
 def send_notification_2_subs(post_id, subject):

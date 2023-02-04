@@ -25,11 +25,13 @@ EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS=True
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
 INSTALLED_APPS = [
+    "import_export_celery",
+    'import_export',
     'jazzmin',
     'blog.apps.BlogConfig',
     'jobs.apps.JobsConfig',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'author.middlewares.AuthorDefaultBackendMiddleware',
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -230,7 +233,7 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Yalchin403",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "administrator.jpg",
+    "site_logo": "administrator.png",
 
     # CSS classes that are applied to the logo above
     "site_logo_classes": "img-circle",
@@ -275,3 +278,13 @@ CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
 # production csrf conf
 CSRF_TRUSTED_ORIGINS=['https://*.yalchin.info']
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# celery import export conf
+IMPORT_EXPORT_CELERY_MODELS = {
+    "profile": {"app_label": "accounts", "model_name": "Profile"},
+    "user": {"app_label": "accounts", "model_name": "User"},
+    "job": {"app_label": "jobs", "model_name": "Job"},
+    "blog": {"app_label": "blog", "model_name": "Blog"},
+    "image": {"app_label": "blog", "model_name": "Image"},
+    "comment": {"app_label": "blog", "model_name": "Comment"},
+}

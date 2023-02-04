@@ -16,6 +16,15 @@ class Profile(models.Model):
             self.profile_photo = "default.jpg"
         return super().save(*args, **kwargs)
     
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import ProfileResource
+
+        return {
+            "profiles": ("profile resources", ProfileResource)
+        }
+
+
 @receiver(post_save, sender=User)
 def create_user_profile( sender, instance, created, **kwargs ):
     if created:

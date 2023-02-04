@@ -15,3 +15,11 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import JobResource
+
+        return {
+            "jobs": ("job resources", JobResource)
+        }

@@ -26,6 +26,7 @@ services:
     image: madefire/chordtest
     build:
       context: ./
+      dockerfile: Dockerfile
     command: bash -c "celery -A portfolio worker -l INFO"
     environment:
       - BROKER_URL=redis://redis:6379/0
