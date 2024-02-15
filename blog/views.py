@@ -115,7 +115,7 @@ class SubscribeView(View):
 
 
 def error_404(request, exception):
-    return render(request, "blog/error2_404.html")
+    return render(request, "blog/error_404.html")
 
 
 def add_comment(request, pk):
