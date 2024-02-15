@@ -1,0 +1,72 @@
+[
+  {
+    "model": "auth.User",
+    "pk": 1,
+    "fields": {
+      "username": "sysadmin@yalchin.info",
+      "email": "sysadmin@yalchin.info",
+      "password": "pbkdf2_sha256$390000$NABlpdSKxNkmySM2IdY1S4$hoWPpknBaAaMW6RI2nsY6aRWaccXR9yFXs+VhmWgZ2Q=",
+      "date_joined": "2022-05-01T00:00:00Z",
+      "last_login": "2022-05-01T00:00:00Z",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "jobs.job",
+    "pk": 5,
+    "fields": {
+      "title": "Python developer",
+      "description": "One time project basically refactoring the existing code base.\n- The main job was parsing and extracting PDF files and indexing essential data into elastic search.",
+      "company_name": "Researchlaw.az",
+      "date_from": "2019-02-01",
+      "date_to": "2019-05-01"
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 4,
+    "fields": {
+      "title": "Django Developer",
+      "description": "Building an automated error monitoring website, to track all the errors related to electronic devices, and generating automated error reports based on the monitored errors.\n- This project included application interface managed by only administrator.",
+      "company_name": "Engine LTD",
+      "date_from": "2019-05-01",
+      "date_to": "2020-01-01"
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 3,
+    "fields": {
+      "title": "Django Developer",
+      "description": "A one time project I've built (later I worked as a project supporter and maintainer) is an advertising website.\n- It includes some premium and VIP packages so including a payment gateway and a bunch of background tasks using celery.",
+      "company_name": "Osaat",
+      "date_from": "2020-02-01",
+      "date_to": "2022-02-01"
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 2,
+    "fields": {
+      "title": "Python/GDScript Developer",
+      "description": "Building various software from web application to games.\n- Writing necessary algorithms required for software to function",
+      "company_name": "Alerian Inc.",
+      "date_from": "2022-02-01",
+      "date_to": "2022-11-02"
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 1,
+    "fields": {
+      "title": "Backend Developer",
+      "description": "Working on server side of enterprise applications combined with blockchain.\n- Using mainly Django for backend API.",
+      "company_name": "Pro-bit.si",
+      "date_from": "2022-11-02",
+      "date_to": null
+    }
+  }
+]

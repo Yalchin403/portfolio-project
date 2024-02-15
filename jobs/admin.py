@@ -1,15 +1,10 @@
 from django.contrib import admin
 from .models import Job
-from .resources import JobResource
-from portfolio.mixins import CeleryExportMixin
-from import_export_celery.admin_actions import create_export_job_action
 
 
 @admin.register(Job)
-class JobAdmin(CeleryExportMixin, admin.ModelAdmin):
+class JobAdmin(admin.ModelAdmin):
     """ModelAdmin for User model to improve default admin functionalities"""
-
-    resource_classes = [JobResource]
 
     list_display = [
         "id",
@@ -28,5 +23,3 @@ class JobAdmin(CeleryExportMixin, admin.ModelAdmin):
         "date_from",
         "date_to",
     ]
-
-    actions = (create_export_job_action,)

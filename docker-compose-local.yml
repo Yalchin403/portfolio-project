@@ -1,27 +1,21 @@
-version: '3'
+version: "3"
 services:
   db:
     image: "postgres:12"
     restart: always
     volumes:
-      - pgdata:/var/lib/postgresql/data/
+      - portfolio_data:/var/lib/postgresql/data/
     env_file:
       - .env
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   redis:
-      image: "redis:latest"
-      ports:
-        - "6379:6379"
-      depends_on:
-        - db
-      restart: always
-      
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    depends_on:
+      - db
+    restart: always
+
   worker:
     image: madefire/chordtest
     build:
@@ -38,11 +32,10 @@ services:
       - db
       - redis
     restart: always
-  
+
   web:
     build:
       context: .
-    
     ports:
       - "8000:8000"
     volumes:
@@ -54,10 +47,9 @@ services:
     command: >
       bash -c "python3 manage.py makemigrations &&
               python3 manage.py migrate &&
-              python3 manage.py migrate --fake &&
               python3 manage.py collectstatic --no-input &&
+              python manage.py loaddata $(find portfolio/fixtures -type f -name '*.json') &&
               python3 manage.py runserver 0.0.0.0:8000"
-      
     links:
       - db:db
       - redis:redis
@@ -69,4 +61,4 @@ services:
     restart: always
 
 volumes:
-  pgdata:
+  portfolio_data:

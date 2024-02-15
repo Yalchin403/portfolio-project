@@ -1,43 +1,37 @@
-name: Django CI
+# name: Django CI
 
-on:
-  push:
-    branches: [ "master", "test_workflow"]
+# on:
+#   push:
+#     branches: [ "master", "test_workflow"]
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: self-hosted
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.8]
+#     runs-on: self-hosted
+#     strategy:
+#       max-parallel: 4
+#       matrix:
+#         python-version: [3.8]
 
-    steps:
-    - name: fix permissions
-      run: |
-        sudo chown -R $USER:$USER ${{ github.workspace }}
-    - name: back up media before reset
-      run: |
-        cd ~/deployPortfolio/_work
-        mkdir -p media_backup
-        cd ${{ github.workspace }}
-        cp -R media/* ~/deployPortfolio/_work/media_backup/
-    - uses: actions/checkout@v3
-      with:
-        clean: false
+#     steps:
+#     - name: fix permissions
+#       run: |
+#         sudo chown -R $USER:$USER ${{ github.workspace }}
+#     - uses: actions/checkout@v3
+#       with:
+#         clean: false
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Configure and Run
-      run: |
-        cp ~/portfolio-project/.env ./.env
-        docker-compose up -d --build
-    - name: Restore media files
-      run: |
-        sudo cp -R ~/deployPortfolio/_work/media_backup/* media/
+#     - name: Set up Python ${{ matrix.python-version }}
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: ${{ matrix.python-version }}
+#     - name: Configure and Run
+#       run: |
+#         cp ~/portfolio-project/.env ./.env
+#         docker-compose up -d --build
+#     - name: Restore media files
+#       run: |
+#         sudo cp -R ~/deployPortfolio/_work/media_backup/* media/

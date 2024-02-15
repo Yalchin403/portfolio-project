@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load markdown_extras %}
   <link rel="apple-touch-icon" href="/custom_icon.png"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -115,7 +116,7 @@
                              <a href="{{blog.slug}}"><img height="200px" width="100%" class="card-img-top" src="{{blog.image.url}}" alt="Card image cap"></a>
                                   <div class="card-body">
                                     <h5 class="card-title">{{blog.title}}</h5>
-                                    <p class="card-text">{{blog.summary|striptags|safe}}</p>
+                                    <p class="card-text">{{blog.summary| markdown |striptags|safe}}</p>
                                   </div>
 
                                   <ul class="list-group list-group-flush">

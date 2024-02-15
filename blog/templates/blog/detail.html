@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-  
+  <style>
+    table, th, td {
+  border: 2px solid black;
+}
+  </style>
   {% load static %}
   {% load social_share %}
+  {% load markdown_extras %}
   <link rel="apple-touch-icon" href="/custom_icon.png"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,15 +30,10 @@
   <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
   <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
   <meta name="theme-color" content="#563d7c">
-  <link href="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai-sublime.css" rel="stylesheet">
-  <script src="/static/ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
   <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
   <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
   <script src="{% static "jquery/jquery.min.js"  %}"></script>
   <script src="{% static "jquery-ui/jquery-ui.min.js"  %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
-  <script src="/static/highlight/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="{% static 'prism.js' %}"></script>
@@ -177,7 +177,7 @@ div.comment-text-sm {
     <p class="detail-image" >
     <a href="{{d_blog.image.url}}"><img src="{{ d_blog.image.url }}" class="responsive"></a><br>
     </p>
-  <p>{{ d_blog.descript|safe }} </p>
+  <p>{{ d_blog.descript | markdown | safe }} </p>
 
  <a href="https://telegram.me/share/url?url=https://yalchin.info{{d_blog.get_absolute_url}}&text={{d_blog.title}}" target="_blank"><img width="20px" height="20px" src="{% static 'telegram.svg' %}"></a>
 

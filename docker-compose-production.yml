@@ -1,0 +1,55 @@
+version: '3'
+services:
+  db:
+    image: "postgres:12"
+    restart: always
+    volumes:
+      - "/home/hacku/volumes/portfolio-volume:/var/lib/postgresql/data/"
+    env_file:
+      - .env
+
+  redis:
+      image: "redis:latest"
+      restart: always
+
+  worker:
+    image: madefire/chordtest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: bash -c "celery -A portfolio worker -l INFO"
+    environment:
+      - BROKER_URL=redis://redis:6379/0
+      - RESULT_BACKEND=redis://redis:6379/0
+      - C_FORCE_ROOT=true
+    volumes:
+      - ./:/app/
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  web:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./:/app"
+      - "/home/hacku/volumes/media/:/app/media"
+    env_file: .env
+    command: >
+      bash -c "python3 manage.py makemigrations &&
+              python3 manage.py migrate &&
+              python3 manage.py migrate --fake &&
+              python3 manage.py collectstatic --no-input &&
+              python3 manage.py runserver 0.0.0.0:8000"
+    links:
+      - db:db
+      - redis:redis
+      - worker:worker
+    depends_on:
+      - db
+      - redis
+      - worker
+    restart: always

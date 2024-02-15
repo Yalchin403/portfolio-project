@@ -30,8 +30,6 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    "import_export_celery",
-    'import_export',
     'jazzmin',
     'blog.apps.BlogConfig',
     'jobs.apps.JobsConfig',
@@ -278,13 +276,3 @@ CKEDITOR_UPLOAD_SLUGIFY_FILENAME = False
 # production csrf conf
 CSRF_TRUSTED_ORIGINS=['https://*.yalchin.info']
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-# celery import export conf
-IMPORT_EXPORT_CELERY_MODELS = {
-    "profile": {"app_label": "accounts", "model_name": "Profile"},
-    "user": {"app_label": "accounts", "model_name": "User"},
-    "job": {"app_label": "jobs", "model_name": "Job"},
-    "blog": {"app_label": "blog", "model_name": "Blog"},
-    "image": {"app_label": "blog", "model_name": "Image"},
-    "comment": {"app_label": "blog", "model_name": "Comment"},
-}

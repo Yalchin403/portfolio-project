@@ -5,27 +5,19 @@ from django.db.models.signals import post_save
 
 
 class Profile(models.Model):
-    admin = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    profile_photo = models.FileField(upload_to='media', null=True)
-    
+    admin = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    profile_photo = models.FileField(upload_to="media", null=True)
+
     def __str__(self):
         return f"{self.admin.username}'s photo"
-    
+
     def save(self, *args, **kwargs):
         if not self.profile_photo:
             self.profile_photo = "default.jpg"
         return super().save(*args, **kwargs)
-    
-    @classmethod
-    def export_resource_classes(cls):
-        from .resources import ProfileResource
-
-        return {
-            "profiles": ("profile resources", ProfileResource)
-        }
 
 
 @receiver(post_save, sender=User)
-def create_user_profile( sender, instance, created, **kwargs ):
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(admin=instance)
