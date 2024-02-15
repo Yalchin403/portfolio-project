@@ -32,6 +32,8 @@ services:
       - db
       - redis
     restart: always
+    env_file: .env
+
 
   web:
     build:
