@@ -43,6 +43,7 @@ services:
               python3 manage.py migrate &&
               python3 manage.py migrate --fake &&
               python3 manage.py collectstatic --no-input &&
+              python manage.py loaddata $(find portfolio/fixtures -type f -name '*.json') &&
               python3 manage.py runserver 0.0.0.0:8000"
     links:
       - db:db
