@@ -115,6 +115,8 @@ class SubscribeView(View):
 
 
 def error_404(request, exception):
+    if not request.path_info.endswith("/"):
+        return redirect(request.path_info + "/")
     return render(request, "blog/error_404.html")
 
 
