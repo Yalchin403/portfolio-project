@@ -186,20 +186,7 @@ div.comment-text-sm {
  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://yalchin.info{{d_blog.get_absolute_url}}" target="_blank"><img width="20px" height="20px" src="{% static 'linkedin.svg' %}"></a>
  
 <br><br>
-<h2>Subscribe to get notified about new posts!</h2>
-  <form method="POST" action="/blog/user/subscribe/">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email Address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
-    <div class="form-group">
-      <label for="text">Full Name</label>
-      <input type="text" class="form-control" id="text" name="fullname" placeholder="Full Name">
-    </div>
-    <button type="submit" class="btn btn-primary">Subscribe</button>
-  </form>
+
 
   {% if messages %}
   {% for message in messages %}
